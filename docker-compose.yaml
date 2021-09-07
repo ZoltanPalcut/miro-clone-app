@@ -1,0 +1,25 @@
+version: '3'
+services: 
+
+ neo4j:
+  image: neo4j:latest
+  container_name: neo4j
+  ports:
+   - 7474:7474
+   - 7687:7687
+  environment:
+   - NEO4J_AUTH=neo4j/test
+   
+ backend:
+  container_name: backend
+  build: 
+   context: miro-clone-backend/
+   dockerfile: Dockerfile
+  restart: on-failure
+  ports:
+   - 8080:8080
+  environment:
+   - ORG_NEO4J_DRIVER_URI=bolt://localhost:7687
+  depends_on: 
+   - neo4j
+  
